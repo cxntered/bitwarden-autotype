@@ -126,9 +126,11 @@ Match_Row(CtrlHwnd, GuiEvent, EventInfo)
 
 Match_Select(Matches, Mode)
 {
-	static MatchId
+	global MatchId, gTotal
+	gTotal := Matches.Count()
 
 	Gui Match:New, +AlwaysOnTop +LastFound +ToolWindow
+	hGui := WinExist()
 	Gui Match:Font, s11
 	Gui Match:Add, ListView, AltSubmit Grid gMatch_Row
 		, % "|#|Entry|User" (Mode = "totp" ? "" : "|TOTP")
@@ -175,6 +177,12 @@ Match_Select(Matches, Mode)
 	}
 	GuiControl Move, SysListView321, % "w" listViewWidth
 
+	Loop, 10 {
+	        key := Mod(A_Index, 10)
+	        Hotkey, IfWinActive, ahk_id %hGui%
+	        Hotkey, % "*" key, HandleDigit, On
+	}
+
 	Mode := { "default": "Default"
 		, "username": "Username-only"
 		, "password": "Password-only"
@@ -183,15 +191,35 @@ Match_Select(Matches, Mode)
 	Gui Match:Show, AutoSize, % " Select Entry (" Mode " sequence)"
 
 	WinWaitClose
+
+	Loop, 10 {
+		key := Mod(A_Index, 10)
+		Hotkey, % "*" key, Off
+	}
+
 	return MatchId
 }
 
 Match_Use()
 {
-	Gui Match:Submit
-	Gosub MatchGuiClose
+    global MatchId
+    MatchId := LV_GetNext(0, "F")
+    Gosub MatchGuiClose
 }
 
+HandleDigit:
+{
+    global MatchId, gTotal
+    key := SubStr(A_ThisHotkey, 0)
+    num := key + 0
+    if (num = 0)
+        num := 10
+    if (num <= gTotal) {
+        MatchId := num
+        Gui, Match:Destroy
+    }
+    return
+}
 
 MatchGuiClose:
 MatchGuiEscape:

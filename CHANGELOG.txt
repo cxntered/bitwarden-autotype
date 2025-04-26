@@ -7,9 +7,15 @@ YYYY/MM/DD - MAJOR.MINOR.RELEASE.BUILD
 [=] = Unchanged
 [!] = Fix / Security
 
+2025/04/27 - 1.1.5
+——————————————————
+[+] Allow numbers to be pressed to select an account
+[+] Added support for Bitwarden CLI >= 2024.09.0
+[!] Fix for "You are already logged in"
+
 
 2022/05/12 - 1.1.4.3
-——————————————————--
+——————————————————
 [!] Fix for Firefox (#30)
 [!] Fix for new Chrome versions
 [+] Support for older IE versions
@@ -18,7 +24,7 @@ YYYY/MM/DD - MAJOR.MINOR.RELEASE.BUILD
 
 
 2022/02/26 - 1.1.4.2
-——————————————————--
+——————————————————
 [+] Better URL detection
 [+] Added support for Opera GX
 [*] Small README.md updates
